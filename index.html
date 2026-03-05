@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="de">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>2-Spalten Lebenslauf (Austrian/DACH) – Editierbar</title>
@@ -9,107 +9,140 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Roboto:wght@400;700;900&family=Open+Sans:wght@400;600;700&family=Lato:wght@400;700;900&family=Merriweather:wght@400;700;900&display=swap"
-            rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Roboto:wght@400;700;900&family=Open+Sans:wght@400;600;700&family=Lato:wght@400;700;900&family=Merriweather:wght@400;700;900&display=swap"
+      rel="stylesheet"
     />
 
     <!-- Tailwind CDN (quick prototyping). For production, use a build step. -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- React CDN -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react@18/umd/react.development.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"
+    ></script>
 
     <!-- Babel (single-file JSX) -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-        :root {
-            --cv-font: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-            --cv-text: #111827; /* neutral-900 */
-            --cv-muted: #4b5563; /* neutral-600 */
-            --cv-heading: #111827;
+      :root {
+        --cv-font:
+          Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        --cv-text: #111827; /* neutral-900 */
+        --cv-muted: #4b5563; /* neutral-600 */
+        --cv-heading: #111827;
 
-            /* spacing */
-            --cv-section-gap: 24px;
-            --cv-item-gap: 14px;
-            --cv-bullet-gap: 6px;
+        /* spacing */
+        --cv-section-gap: 24px;
+        --cv-item-gap: 14px;
+        --cv-bullet-gap: 6px;
 
-            /* section title badge */
-            --cv-section-bg: #111827;
-            --cv-section-text: #ffffff;
+        /* section title badge */
+        --cv-section-bg: #111827;
+        --cv-section-text: #ffffff;
+      }
+
+      body {
+        font-family: var(--cv-font);
+        color: var(--cv-text);
+      }
+
+      @media print {
+        @page {
+          size: A4;
+          margin: 6mm;
+        }
+        body {
+          background: white !important;
+        }
+        .no-print {
+          display: none !important;
+        }
+        .print-no-shadow {
+          box-shadow: none !important;
+        }
+        .print-break-avoid {
+          break-inside: avoid;
+          page-break-inside: avoid;
         }
 
-        body { font-family: var(--cv-font); color: var(--cv-text); }
-
-        @media print {
-            @page { size: A4; margin: 6mm; }
-            body { background: white !important; }
-            .no-print { display: none !important; }
-            .print-no-shadow { box-shadow: none !important; }
-            .print-break-avoid { break-inside: avoid; page-break-inside: avoid; }
-
-            /* Force 2-column layout on print */
-            .cv-grid { display: grid !important; grid-template-columns: 240px 1fr !important; }
-            .cv-aside { border-right: 1px solid #e5e7eb !important; padding: 18px !important; }
-            .cv-main { padding: 18px !important; }
-
-            /* no outer border */
-            .cv-shell { border: none !important; border-radius: 0 !important; }
+        /* Force 2-column layout on print */
+        .cv-grid {
+          display: grid !important;
+          grid-template-columns: 240px 1fr !important;
+        }
+        .cv-aside {
+          border-right: 1px solid #e5e7eb !important;
+          padding: 18px !important;
+        }
+        .cv-main {
+          padding: 18px !important;
         }
 
-        @media print {
-            .min-h-screen {
-                padding-top: 0 !important;
-                padding-bottom: 0 !important;
-            }
+        /* no outer border */
+        .cv-shell {
+          border: none !important;
+          border-radius: 0 !important;
         }
+      }
 
-        [contenteditable="true"]:focus {
-            outline: 2px solid rgba(59, 130, 246, 0.4);
-            outline-offset: 2px;
-            border-radius: 8px;
+      @media print {
+        .min-h-screen {
+          padding-top: 0 !important;
+          padding-bottom: 0 !important;
         }
+      }
 
-        [contenteditable="true"]:empty:before {
-            content: attr(data-placeholder);
-            color: #9ca3af;
-        }
+      [contenteditable="true"]:focus {
+        outline: 2px solid rgba(59, 130, 246, 0.4);
+        outline-offset: 2px;
+        border-radius: 8px;
+      }
+
+      [contenteditable="true"]:empty:before {
+        content: attr(data-placeholder);
+        color: #9ca3af;
+      }
     </style>
-</head>
+  </head>
 
-<body class="bg-neutral-100">
-<div id="root"></div>
+  <body class="bg-neutral-100">
+    <div id="root"></div>
 
-<script type="text/babel">
-    const { useEffect, useRef, useState } = React;
+    <script type="text/babel">
+      const { useEffect, useRef, useState } = React;
 
-    const STORAGE_KEY = "bhety-cv-v5";
+      const STORAGE_KEY = "bhety-cv-v5";
 
-    function uid(prefix = "id") {
+      function uid(prefix = "id") {
         return `${prefix}_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
-    }
+      }
 
-    function loadState(fallback) {
+      function loadState(fallback) {
         try {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (!raw) return fallback;
-            const parsed = JSON.parse(raw);
-            return { ...fallback, ...parsed };
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return fallback;
+          const parsed = JSON.parse(raw);
+          return { ...fallback, ...parsed };
         } catch {
-            return fallback;
+          return fallback;
         }
-    }
+      }
 
-    function saveState(state) {
+      function saveState(state) {
         try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
         } catch {
-            // ignore
+          // ignore
         }
-    }
+      }
 
-    function applyThemeSettings(settings) {
+      function applyThemeSettings(settings) {
         const root = document.documentElement;
         if (!root) return;
 
@@ -125,119 +158,159 @@
         // Section title badge colors
         root.style.setProperty("--cv-section-bg", settings.sectionBgColor);
         root.style.setProperty("--cv-section-text", settings.sectionTitleColor);
-    }
+      }
 
-    function Button({ children, onClick, variant = "solid", small = false, title }) {
-        const base = small ? "text-xs px-2 py-1 rounded-lg" : "text-xs px-3 py-1.5 rounded-xl";
+      function Button({
+        children,
+        onClick,
+        variant = "solid",
+        small = false,
+        title,
+      }) {
+        const base = small
+          ? "text-xs px-2 py-1 rounded-lg"
+          : "text-xs px-3 py-1.5 rounded-xl";
         const styles =
-            variant === "solid"
-                ? "bg-neutral-900 text-white hover:bg-neutral-800"
-                : "bg-white border border-neutral-200 text-neutral-900 hover:bg-neutral-50";
+          variant === "solid"
+            ? "bg-neutral-900 text-white hover:bg-neutral-800"
+            : "bg-white border border-neutral-200 text-neutral-900 hover:bg-neutral-50";
         return (
-            <button type="button" title={title} onClick={onClick} className={`${base} ${styles} font-semibold`}>
-                {children}
-            </button>
+          <button
+            type="button"
+            title={title}
+            onClick={onClick}
+            className={`${base} ${styles} font-semibold`}
+          >
+            {children}
+          </button>
         );
-    }
+      }
 
-    function EditableText({ value, onChange, className, placeholder, multiline = false }) {
+      function EditableText({
+        value,
+        onChange,
+        className,
+        placeholder,
+        multiline = false,
+      }) {
         const ref = useRef(null);
 
         useEffect(() => {
-            const el = ref.current;
-            if (!el) return;
-            const domText = multiline ? el.innerText : el.textContent;
-            if ((domText || "") !== (value || "")) {
-                el.innerText = value || "";
-            }
+          const el = ref.current;
+          if (!el) return;
+          const domText = multiline ? el.innerText : el.textContent;
+          if ((domText || "") !== (value || "")) {
+            el.innerText = value || "";
+          }
         }, [value, multiline]);
 
         const handleBlur = () => {
-            const el = ref.current;
-            if (!el) return;
-            const next = el.innerText.replace(/ /g, " ");
-            onChange(next);
+          const el = ref.current;
+          if (!el) return;
+          const next = el.innerText.replace(/ /g, " ");
+          onChange(next);
         };
 
         return (
+          <div
+            ref={ref}
+            className={className}
+            contentEditable
+            suppressContentEditableWarning
+            onBlur={handleBlur}
+            data-placeholder={placeholder}
+          />
+        );
+      }
+
+      function SidebarField({ label, value, onChange }) {
+        return (
+          <div className="text-xs">
             <div
-                ref={ref}
-                className={className}
-                contentEditable
-                suppressContentEditableWarning
-                onBlur={handleBlur}
-                data-placeholder={placeholder}
+              className="font-semibold"
+              style={{ color: "var(--cv-heading)" }}
+            >
+              {label}
+            </div>
+            <EditableText
+              value={value}
+              onChange={onChange}
+              className="break-words"
+              placeholder={label}
             />
+          </div>
         );
-    }
+      }
 
-    function SidebarField({ label, value, onChange }) {
+      function SectionTitle({ titleNode, right }) {
         return (
-            <div className="text-xs">
-                <div className="font-semibold" style={{ color: "var(--cv-heading)" }}>{label}</div>
-                <EditableText value={value} onChange={onChange} className="break-words" placeholder={label} />
-            </div>
+          <div
+            className="flex items-end justify-between gap-3"
+            style={{ marginTop: "var(--cv-section-gap)" }}
+          >
+            <div className="min-w-0">{titleNode}</div>
+            {right ? <div className="no-print shrink-0">{right}</div> : null}
+          </div>
         );
-    }
+      }
 
-    function SectionTitle({ titleNode, right }) {
-        return (
-            <div className="flex items-end justify-between gap-3" style={{ marginTop: "var(--cv-section-gap)" }}>
-                <div className="min-w-0">{titleNode}</div>
-                {right ? <div className="no-print shrink-0">{right}</div> : null}
-            </div>
-        );
-    }
-
-    function DraggableItems({ items, setItems, render }) {
+      function DraggableItems({ items, setItems, render }) {
         const dragId = useRef(null);
 
         const onDragStart = (id) => (e) => {
-            dragId.current = id;
-            e.dataTransfer.effectAllowed = "move";
-            try { e.dataTransfer.setData("text/plain", id); } catch {}
+          dragId.current = id;
+          e.dataTransfer.effectAllowed = "move";
+          try {
+            e.dataTransfer.setData("text/plain", id);
+          } catch {}
         };
 
         const onDragOver = (id) => (e) => {
-            e.preventDefault();
-            e.dataTransfer.dropEffect = "move";
+          e.preventDefault();
+          e.dataTransfer.dropEffect = "move";
         };
 
         const onDrop = (id) => (e) => {
-            e.preventDefault();
-            const fromId = dragId.current || (() => {
-                try { return e.dataTransfer.getData("text/plain"); } catch { return null; }
+          e.preventDefault();
+          const fromId =
+            dragId.current ||
+            (() => {
+              try {
+                return e.dataTransfer.getData("text/plain");
+              } catch {
+                return null;
+              }
             })();
-            if (!fromId || fromId === id) return;
+          if (!fromId || fromId === id) return;
 
-            setItems((prev) => {
-                const from = prev.findIndex((x) => x.id === fromId);
-                const to = prev.findIndex((x) => x.id === id);
-                if (from < 0 || to < 0) return prev;
-                const next = [...prev];
-                const [moved] = next.splice(from, 1);
-                next.splice(to, 0, moved);
-                return next;
-            });
+          setItems((prev) => {
+            const from = prev.findIndex((x) => x.id === fromId);
+            const to = prev.findIndex((x) => x.id === id);
+            if (from < 0 || to < 0) return prev;
+            const next = [...prev];
+            const [moved] = next.splice(from, 1);
+            next.splice(to, 0, moved);
+            return next;
+          });
         };
 
         return (
-            <div>
-                {items.map((it) => (
-                    <div
-                        key={it.id}
-                        draggable
-                        onDragStart={onDragStart(it.id)}
-                        onDragOver={onDragOver(it.id)}
-                        onDrop={onDrop(it.id)}
-                    >
-                        {render(it)}
-                    </div>
-                ))}
-            </div>
+          <div>
+            {items.map((it) => (
+              <div
+                key={it.id}
+                draggable
+                onDragStart={onDragStart(it.id)}
+                onDragOver={onDragOver(it.id)}
+                onDrop={onDrop(it.id)}
+              >
+                {render(it)}
+              </div>
+            ))}
+          </div>
         );
-    }
-    /*
+      }
+      /*
     function ItemCard({ item, onChange, onDelete, showLink = true }) {
       return (
         <div
@@ -332,260 +405,345 @@
       );
     } */
 
-
-    function ItemCard({ item, onChange, onDelete, showLink = true }) {
+      function ItemCard({ item, onChange, onDelete, showLink = true }) {
         return (
-            <div
-                className="print-break-avoid rounded-xl border border-transparent hover:border-neutral-200 hover:bg-neutral-50/40 p-2"
-                style={{ marginTop: "var(--cv-item-gap)" }}
-            >
-                <div className="flex items-start justify-between gap-4">
-                    <div className="min-w-0 flex-1">
-                        {item.date && (
-                            <div className="mb-1.5">
-                                <EditableText
-                                    value={item.date}
-                                    onChange={(v) => onChange({ ...item, date: v })}
-                                    className="inline-flex items-center rounded-full border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-bold"
-                                    placeholder="Datum"
-                                />
-                            </div>
-                        )}
+          <div
+            className="print-break-avoid rounded-xl border border-transparent hover:border-neutral-200 hover:bg-neutral-50/40 p-2"
+            style={{ marginTop: "var(--cv-item-gap)" }}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0 flex-1">
+                {item.date && (
+                  <div className="mb-1.5">
+                    <EditableText
+                      value={item.date}
+                      onChange={(v) => onChange({ ...item, date: v })}
+                      className="inline-flex items-center rounded-full border border-neutral-200 bg-white px-2 py-0.5 text-[11px] font-bold"
+                      placeholder="Datum"
+                    />
+                  </div>
+                )}
 
-                        <div className="flex items-center gap-2">
-            <span
-                className="no-print inline-flex cursor-grab select-none items-center text-[10px] font-bold"
-                style={{ color: "var(--cv-muted)" }}
-                title="Ziehen zum Sortieren"
-            >
-              ⇅
-            </span>
-                            <EditableText
-                                value={item.title}
-                                onChange={(v) => onChange({ ...item, title: v })}
-                                className="text-sm font-semibold"
-                                placeholder="Titel"
-                            />
-                        </div>
-
-                        {item.location && (
-                            <div className="mt-0.5">
-                                <EditableText
-                                    value={item.location}
-                                    onChange={(v) => onChange({ ...item, location: v })}
-                                    className="text-xs leading-snug text-neutral-600"
-                                    placeholder="Ort"
-                                />
-                            </div>
-                        )}
-
-                        {item.meta && (
-                            <EditableText
-                                value={item.meta}
-                                onChange={(v) => onChange({ ...item, meta: v })}
-                                className="mt-1 text-xs text-neutral-500"
-                                placeholder="Tech Stack / Meta"
-                            />
-                        )}
-
-                        {showLink ? (
-                            <div className="no-print mt-2 flex flex-wrap items-center gap-2 text-xs">
-                                <EditableText
-                                    value={item.linkLabel || ""}
-                                    onChange={(v) => onChange({ ...item, linkLabel: v })}
-                                    className="font-semibold"
-                                    placeholder="Link (z.B. Demo/GitHub)"
-                                />
-                                <EditableText
-                                    value={item.linkHref || ""}
-                                    onChange={(v) => onChange({ ...item, linkHref: v })}
-                                    className="break-all"
-                                    placeholder="https://…"
-                                />
-                                {item.linkHref ? (
-                                    <a
-                                        className="underline decoration-neutral-300 underline-offset-2 hover:text-neutral-900"
-                                        href={item.linkHref}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        Öffnen
-                                    </a>
-                                ) : null}
-                            </div>
-                        ) : null}
-                    </div>
-
-                    <div className="no-print flex items-center gap-2 shrink-0">
-                        <Button small variant="ghost" title="Eintrag löschen" onClick={onDelete}>
-                            Löschen
-                        </Button>
-                    </div>
+                <div className="flex items-center gap-2">
+                  <span
+                    className="no-print inline-flex cursor-grab select-none items-center text-[10px] font-bold"
+                    style={{ color: "var(--cv-muted)" }}
+                    title="Ziehen zum Sortieren"
+                  >
+                    ⇅
+                  </span>
+                  <EditableText
+                    value={item.title}
+                    onChange={(v) => onChange({ ...item, title: v })}
+                    className="text-sm font-semibold"
+                    placeholder="Titel"
+                  />
                 </div>
 
-                {Array.isArray(item.bullets) && item.bullets.length ? (
-                    <ul
-                        className="mt-2 list-disc pl-4 text-xs leading-relaxed"
-                        style={{ rowGap: "var(--cv-bullet-gap)" }}
-                    >
-                        {item.bullets.map((b, i) => (
-                            <li key={i} style={{ marginTop: i === 0 ? 0 : "var(--cv-bullet-gap)" }}>
-                                <EditableText
-                                    value={b}
-                                    onChange={(v) => {
-                                        const next = [...item.bullets];
-                                        next[i] = v;
-                                        onChange({ ...item, bullets: next });
-                                    }}
-                                    className="inline"
-                                    placeholder="Bullet"
-                                />
-                            </li>
-                        ))}
-                    </ul>
-                ) : null}
-            </div>
-        );
-    }
+                {item.location && (
+                  <div className="mt-0.5">
+                    <EditableText
+                      value={item.location}
+                      onChange={(v) => onChange({ ...item, location: v })}
+                      className="text-xs leading-snug text-neutral-600"
+                      placeholder="Ort"
+                    />
+                  </div>
+                )}
 
-    function App() {
+                {item.meta && (
+                  <EditableText
+                    value={item.meta}
+                    onChange={(v) => onChange({ ...item, meta: v })}
+                    className="mt-1 text-xs text-neutral-500"
+                    placeholder="Tech Stack / Meta"
+                  />
+                )}
+
+                {showLink ? (
+                  <div className="no-print mt-2 flex flex-wrap items-center gap-2 text-xs">
+                    <EditableText
+                      value={item.linkLabel || ""}
+                      onChange={(v) => onChange({ ...item, linkLabel: v })}
+                      className="font-semibold"
+                      placeholder="Link (z.B. Demo/GitHub)"
+                    />
+                    <EditableText
+                      value={item.linkHref || ""}
+                      onChange={(v) => onChange({ ...item, linkHref: v })}
+                      className="break-all"
+                      placeholder="https://…"
+                    />
+                    {item.linkHref ? (
+                      <a
+                        className="underline decoration-neutral-300 underline-offset-2 hover:text-neutral-900"
+                        href={item.linkHref}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        Öffnen
+                      </a>
+                    ) : null}
+                  </div>
+                ) : null}
+              </div>
+
+              <div className="no-print flex items-center gap-2 shrink-0">
+                <Button
+                  small
+                  variant="ghost"
+                  title="Eintrag löschen"
+                  onClick={onDelete}
+                >
+                  Löschen
+                </Button>
+              </div>
+            </div>
+
+            {Array.isArray(item.bullets) && item.bullets.length ? (
+              <ul
+                className="mt-2 list-disc pl-4 text-xs leading-relaxed"
+                style={{ rowGap: "var(--cv-bullet-gap)" }}
+              >
+                {item.bullets.map((b, i) => (
+                  <li
+                    key={i}
+                    style={{ marginTop: i === 0 ? 0 : "var(--cv-bullet-gap)" }}
+                  >
+                    <EditableText
+                      value={b}
+                      onChange={(v) => {
+                        const next = [...item.bullets];
+                        next[i] = v;
+                        onChange({ ...item, bullets: next });
+                      }}
+                      className="inline"
+                      placeholder="Bullet"
+                    />
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
+        );
+      }
+
+      function App() {
         const FONT_OPTIONS = [
-            { label: "Inter", value: "Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif" },
-            { label: "Roboto", value: "Roboto, system-ui, -apple-system, Segoe UI, Arial, sans-serif" },
-            { label: "Open Sans", value: "\"Open Sans\", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif" },
-            { label: "Lato", value: "Lato, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif" },
-            { label: "Merriweather", value: "Merriweather, Georgia, serif" },
+          {
+            label: "Inter",
+            value:
+              "Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
+          },
+          {
+            label: "Roboto",
+            value:
+              "Roboto, system-ui, -apple-system, Segoe UI, Arial, sans-serif",
+          },
+          {
+            label: "Open Sans",
+            value:
+              '"Open Sans", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif',
+          },
+          {
+            label: "Lato",
+            value:
+              "Lato, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif",
+          },
+          { label: "Merriweather", value: "Merriweather, Georgia, serif" },
         ];
 
         const fallback = {
-            settings: {
-                fontFamily: FONT_OPTIONS[0].value,
-                textColor: "#111827",
-                mutedColor: "#4b5563",
-                headingColor: "#111827",
+          settings: {
+            fontFamily: FONT_OPTIONS[0].value,
+            textColor: "#111827",
+            mutedColor: "#4b5563",
+            headingColor: "#111827",
 
-                // NEW: section title badge colors
-                sectionBgColor: "#111827",
-                sectionTitleColor: "#ffffff",
+            // NEW: section title badge colors
+            sectionBgColor: "#111827",
+            sectionTitleColor: "#ffffff",
 
-                sectionGap: 24,
-                itemGap: 14,
-                bulletGap: 6,
+            sectionGap: 24,
+            itemGap: 14,
+            bulletGap: 6,
+          },
+
+          sectionOrder: [
+            "profile",
+            "experience",
+            "projects",
+            "education",
+            "lifePhases",
+          ],
+          sections: {
+            profile: {
+              id: "profile",
+              type: "text",
+              title: "Kurzprofil",
+              column: "right",
+              contentKey: "profile",
             },
-
-            sectionOrder: ["profile", "experience", "projects", "education", "lifePhases"],
-            sections: {
-                profile: { id: "profile", type: "text", title: "Kurzprofil", column: "right", contentKey: "profile" },
-                experience: { id: "experience", type: "list", title: "Berufserfahrung", column: "right", listKey: "experience" },
-                projects: { id: "projects", type: "list", title: "Projekte", column: "right", listKey: "projects" },
-                education: { id: "education", type: "list", title: "Ausbildung", column: "right", listKey: "education" },
-                lifePhases: { id: "lifePhases", type: "list", title: "Weitere Lebensphasen", column: "right", listKey: "lifePhases" },
+            experience: {
+              id: "experience",
+              type: "list",
+              title: "Berufserfahrung",
+              column: "right",
+              listKey: "experience",
             },
-
-            header: {
-                name: "Jenny Mustermann",
-                headline: "Junior Full-Stack Softwareentwicklerin",
-                subHeadline: "JavaScript | Java | Vue/Nuxt | React | Node.js",
+            projects: {
+              id: "projects",
+              type: "list",
+              title: "Projekte",
+              column: "right",
+              listKey: "projects",
             },
-
-            personal: {
-                Telefon: "+43 677 6334343411",
-                Adresse: "Linz, Österreich",
-                Geburtsdatum: "TT.MM.JJJJ",
-                "E-Mail": "jenny.mustermann@gmail.com",
-                Arbeitserlaubnis: "Uneingeschränkt in Österreich",
-                Portfolio: "bhetyportfolio.com",
-                LinkedIn: "linkedin.com/in/jenny-mustermann",
-                "In Österreich seit": "2011",
+            education: {
+              id: "education",
+              type: "list",
+              title: "Ausbildung",
+              column: "right",
+              listKey: "education",
             },
-
-            languages: [
-                { label: "Deutsch", level: "B2" },
-                { label: "Englisch", level: "C1" },
-                { label: "Tagalog", level: "Muttersprache" },
-                { label: "Bicol", level: "Muttersprache" },
-            ],
-
-            skills: {
-                Programmiersprachen: "JavaScript, TypeScript, Java, Python, SQL, PHP, C++",
-                Frontend: "React, Vue.js, Nuxt, Next.js, Tailwind CSS, Bootstrap, HTML, CSS",
-                Backend: "Node.js, Express, Spring Boot, FastAPI",
-                Datenbanken: "PostgreSQL, MongoDB, MySQL, OracleDB",
-                Tools: "Docker, GitLab CI/CD, Postman, Vercel, Railway, Netlify",
+            lifePhases: {
+              id: "lifePhases",
+              type: "list",
+              title: "Weitere Lebensphasen",
+              column: "right",
+              listKey: "lifePhases",
             },
+          },
 
-            photo: { dataUrl: "" },
+          header: {
+            name: "Jenny Mustermann",
+            headline: "Junior Full-Stack Softwareentwicklerin",
+            subHeadline: "JavaScript | Java | Vue/Nuxt | React | Node.js",
+          },
 
-            profile:
-                "Junior Full-Stack Softwareentwicklerin mit Schwerpunkt auf modernen Webanwendungen. Erfahrung in der Umsetzung kompletter Weblösungen – von UI/UX-Design über Backend-Services bis Deployment. Technischer Hintergrund in Regelungstechnik, Maschinenbau und industrieller Instandhaltung. Deutsch B2, Englisch C1.",
+          personal: {
+            Telefon: "+43 677 6334343411",
+            Adresse: "Linz, Österreich",
+            Geburtsdatum: "TT.MM.JJJJ",
+            "E-Mail": "jenny.mustermann@gmail.com",
+            Arbeitserlaubnis: "Uneingeschränkt in Österreich",
+            Portfolio: "bhetyportfolio.com",
+            LinkedIn: "linkedin.com/in/jenny-mustermann",
+            "In Österreich seit": "2011",
+          },
 
-            experience: [
-                {
-                    id: "exp1",
-                    title: "Full-Stack Developer – BT Code Solutions (Pro-Bono Initiative)",
-                    date: "12/2025 – heute",
-                    location: "Remote",
-                    bullets: [
-                        "Entwicklung von Webanwendungen mit React, Vue/Nuxt sowie Node.js und Java Spring Boot",
-                        "Implementierung von REST-APIs und Datenbankintegration",
-                        "Deployment und Betrieb von Anwendungen mit Docker und VPS-Hosting",
-                    ],
-                },
-                {
-                    id: "exp2",
-                    title: "Instandhaltungstechnikerin – Energie AG Umweltservice",
-                    date: "09/2023 – 05/2024",
-                    location: "Wels",
-                    bullets: [
-                        "Wartung und Instandhaltung technischer Anlagen",
-                        "Fehleranalyse und Störungsbehebung",
-                        "Unterstützung bei technischen Optimierungen",
-                    ],
-                },
-                {
-                    id: "exp3",
-                    title: "Maschinenbautechnik (Lehre)",
-                    date: "09/2021 – 06/2023",
-                    location: "BFI Metallzentrum Attnang-Puchheim",
-                    bullets: [
-                        "Fertigungs- und Instandhaltungstechniken",
-                        "Arbeit mit Maschinen, Werkzeugen und technischen Zeichnungen",
-                        "Mitarbeit in Werkstatt- und Produktionsprozessen",
-                    ],
-                },
-            ],
+          languages: [
+            { label: "Deutsch", level: "B2" },
+            { label: "Englisch", level: "C1" },
+            { label: "Tagalog", level: "Muttersprache" },
+            { label: "Bicol", level: "Muttersprache" },
+          ],
 
-            projects: [
-                {
-                    id: "proj1",
-                    title: "LocalMarktplatz+ – Full-Stack Marktplatzplattform",
-                    meta: "React, Next.js, Nuxt, Node.js, Express, WebSocket",
-                    bullets: [
-                        "Plattform für lokale Märkte mit rollenbasierten Dashboards",
-                        "Interaktive Standplanung und Echtzeit-Kommunikation",
-                        "REST-APIs und Authentifizierung (JWT)",
-                    ],
-                    linkLabel: "Demo",
-                    linkHref: "https://www.loom.com/share/3cec4809cead4dce8294da9fce138573",
-                },
-                {
-                    id: "proj2",
-                    title: "LinzSouvenir – E-Commerce Plattform (Bootcamp Projekt)",
-                    meta: "Vue.js, Nuxt, Pinia, Bootstrap",
-                    bullets: ["Produktübersicht, Warenkorb und Checkout", "Responsives UI für Desktop und Mobile"],
-                    linkLabel: "Demo",
-                    linkHref: "https://linzsouvenir.bhetycodes.com",
-                },
-            ],
+          skills: {
+            Programmiersprachen:
+              "JavaScript, TypeScript, Java, Python, SQL, PHP, C++",
+            Frontend:
+              "React, Vue.js, Nuxt, Next.js, Tailwind CSS, Bootstrap, HTML, CSS",
+            Backend: "Node.js, Express, Spring Boot, FastAPI",
+            Datenbanken: "PostgreSQL, MongoDB, MySQL, OracleDB",
+            Tools: "Docker, GitLab CI/CD, Postman, Vercel, Railway, Netlify",
+          },
 
-            education: [
-                { id: "edu1", title: "Lehrgang Applikationsentwicklung (PHP, SQL, HTML, JavaScript)", date: "09/2025 – 07/2026", location: "WIFI Oberösterreich, Linz", bullets: [] },
-                { id: "edu2", title: "Java Developer Program (Java, Spring Boot, SQL)", date: "10/2025 – 07/2026", location: "Uplift Code Camp", bullets: [] },
-            ],
+          photo: { dataUrl: "" },
 
-            lifePhases: [
-                { id: "life1", title: "Familienphase / Elternzeit", date: "2017 – 2021", location: "Österreich", bullets: [] },
-            ],
+          profile:
+            "Junior Full-Stack Softwareentwicklerin mit Schwerpunkt auf modernen Webanwendungen. Erfahrung in der Umsetzung kompletter Weblösungen – von UI/UX-Design über Backend-Services bis Deployment. Technischer Hintergrund in Regelungstechnik, Maschinenbau und industrieller Instandhaltung. Deutsch B2, Englisch C1.",
+
+          experience: [
+            {
+              id: "exp1",
+              title:
+                "Full-Stack Developer – BT Code Solutions (Pro-Bono Initiative)",
+              date: "12/2025 – heute",
+              location: "Remote",
+              bullets: [
+                "Entwicklung von Webanwendungen mit React, Vue/Nuxt sowie Node.js und Java Spring Boot",
+                "Implementierung von REST-APIs und Datenbankintegration",
+                "Deployment und Betrieb von Anwendungen mit Docker und VPS-Hosting",
+              ],
+            },
+            {
+              id: "exp2",
+              title: "Instandhaltungstechnikerin – Energie AG Umweltservice",
+              date: "09/2023 – 05/2024",
+              location: "Wels",
+              bullets: [
+                "Wartung und Instandhaltung technischer Anlagen",
+                "Fehleranalyse und Störungsbehebung",
+                "Unterstützung bei technischen Optimierungen",
+              ],
+            },
+            {
+              id: "exp3",
+              title: "Maschinenbautechnik (Lehre)",
+              date: "09/2021 – 06/2023",
+              location: "BFI Metallzentrum Attnang-Puchheim",
+              bullets: [
+                "Fertigungs- und Instandhaltungstechniken",
+                "Arbeit mit Maschinen, Werkzeugen und technischen Zeichnungen",
+                "Mitarbeit in Werkstatt- und Produktionsprozessen",
+              ],
+            },
+          ],
+
+          projects: [
+            {
+              id: "proj1",
+              title: "LocalMarktplatz+ – Full-Stack Marktplatzplattform",
+              meta: "React, Next.js, Nuxt, Node.js, Express, WebSocket",
+              bullets: [
+                "Plattform für lokale Märkte mit rollenbasierten Dashboards",
+                "Interaktive Standplanung und Echtzeit-Kommunikation",
+                "REST-APIs und Authentifizierung (JWT)",
+              ],
+              linkLabel: "Demo",
+              linkHref:
+                "https://www.loom.com/share/3cec4809cead4dce8294da9fce138573",
+            },
+            {
+              id: "proj2",
+              title: "LinzSouvenir – E-Commerce Plattform (Bootcamp Projekt)",
+              meta: "Vue.js, Nuxt, Pinia, Bootstrap",
+              bullets: [
+                "Produktübersicht, Warenkorb und Checkout",
+                "Responsives UI für Desktop und Mobile",
+              ],
+              linkLabel: "Demo",
+              linkHref: "https://linzsouvenir.bhetycodes.com",
+            },
+          ],
+
+          education: [
+            {
+              id: "edu1",
+              title:
+                "Lehrgang Applikationsentwicklung (PHP, SQL, HTML, JavaScript)",
+              date: "09/2025 – 07/2026",
+              location: "WIFI Oberösterreich, Linz",
+              bullets: [],
+            },
+            {
+              id: "edu2",
+              title: "Java Developer Program (Java, Spring Boot, SQL)",
+              date: "10/2025 – 07/2026",
+              location: "Uplift Code Camp",
+              bullets: [],
+            },
+          ],
+
+          lifePhases: [
+            {
+              id: "life1",
+              title: "Familienphase / Elternzeit",
+              date: "2017 – 2021",
+              location: "Österreich",
+              bullets: [],
+            },
+          ],
         };
 
         const [state, setState] = useState(() => loadState(fallback));
@@ -597,597 +755,879 @@
         // Actions
         const exportPDF = () => window.print();
         const resetAll = () => {
-            try { localStorage.removeItem(STORAGE_KEY); } catch {}
-            setState(fallback);
+          try {
+            localStorage.removeItem(STORAGE_KEY);
+          } catch {}
+          setState(fallback);
         };
 
         const handlePhotoUpload = (file) => {
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = () => {
-                const dataUrl = String(reader.result || "");
-                setState((s) => ({ ...s, photo: { dataUrl } }));
-            };
-            reader.readAsDataURL(file);
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = () => {
+            const dataUrl = String(reader.result || "");
+            setState((s) => ({ ...s, photo: { dataUrl } }));
+          };
+          reader.readAsDataURL(file);
         };
 
         // Section drag (whole sections)
         const dragSectionId = useRef(null);
-        const onSectionDragStart = (id) => () => { dragSectionId.current = id; };
+        const onSectionDragStart = (id) => () => {
+          dragSectionId.current = id;
+        };
         const onSectionDrop = (targetId) => () => {
-            const fromId = dragSectionId.current;
-            if (!fromId || fromId === targetId) return;
-            setState((s) => {
-                const order = [...s.sectionOrder];
-                const from = order.indexOf(fromId);
-                const to = order.indexOf(targetId);
-                if (from < 0 || to < 0) return s;
-                order.splice(from, 1);
-                order.splice(to, 0, fromId);
-                return { ...s, sectionOrder: order };
-            });
+          const fromId = dragSectionId.current;
+          if (!fromId || fromId === targetId) return;
+          setState((s) => {
+            const order = [...s.sectionOrder];
+            const from = order.indexOf(fromId);
+            const to = order.indexOf(targetId);
+            if (from < 0 || to < 0) return s;
+            order.splice(from, 1);
+            order.splice(to, 0, fromId);
+            return { ...s, sectionOrder: order };
+          });
         };
 
-
-
-
-
-
         const SectionWrapper = ({ id, children }) => (
+          <div
+            draggable
+            onDragStart={onSectionDragStart(id)}
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={onSectionDrop(id)}
+            className="group"
+          >
             <div
-                draggable
-                onDragStart={onSectionDragStart(id)}
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={onSectionDrop(id)}
-                className="group"
+              className="no-print mb-1 text-[10px]"
+              style={{ color: "var(--cv-muted)" }}
             >
-                <div className="no-print mb-1 text-[10px]" style={{ color: "var(--cv-muted)" }}>
               <span className="inline-flex items-center gap-2">
                 <span className="cursor-move select-none">⇅</span>
                 <span>Section verschieben</span>
               </span>
-                </div>
-                {children}
             </div>
+            {children}
+          </div>
         );
 
         // Helpers
         const updateSectionTitle = (sectionId, title) => {
-            setState((s) => ({
-                ...s,
-                sections: { ...s.sections, [sectionId]: { ...s.sections[sectionId], title } },
-            }));
+          setState((s) => ({
+            ...s,
+            sections: {
+              ...s.sections,
+              [sectionId]: { ...s.sections[sectionId], title },
+            },
+          }));
         };
 
         const addListItem = (listKey, template) => {
-            setState((s) => ({ ...s, [listKey]: [...s[listKey], { id: uid(listKey), ...template }] }));
+          setState((s) => ({
+            ...s,
+            [listKey]: [...s[listKey], { id: uid(listKey), ...template }],
+          }));
         };
 
         const deleteListItem = (listKey, id) => {
-            setState((s) => ({ ...s, [listKey]: s[listKey].filter((x) => x.id !== id) }));
+          setState((s) => ({
+            ...s,
+            [listKey]: s[listKey].filter((x) => x.id !== id),
+          }));
         };
 
         const updateListItem = (listKey, id, nextItem) => {
-            setState((s) => ({ ...s, [listKey]: s[listKey].map((x) => (x.id === id ? nextItem : x)) }));
+          setState((s) => ({
+            ...s,
+            [listKey]: s[listKey].map((x) => (x.id === id ? nextItem : x)),
+          }));
         };
 
         const setList = (listKey) => (updater) => {
-            setState((s) => {
-                const next = typeof updater === "function" ? updater(s[listKey]) : updater;
-                return { ...s, [listKey]: next };
-            });
+          setState((s) => {
+            const next =
+              typeof updater === "function" ? updater(s[listKey]) : updater;
+            return { ...s, [listKey]: next };
+          });
         };
 
         const createSection = (type) => {
-            const title = window.prompt("Titel der neuen Section?", type === "text" ? "Zusätzliche Informationen" : "Weitere Projekte");
-            if (!title) return;
-            const id = uid("sec");
+          const title = window.prompt(
+            "Titel der neuen Section?",
+            type === "text" ? "Zusätzliche Informationen" : "Weitere Projekte",
+          );
+          if (!title) return;
+          const id = uid("sec");
 
-            setState((s) => {
-                const next = { ...s };
-                next.sectionOrder = [...s.sectionOrder, id];
+          setState((s) => {
+            const next = { ...s };
+            next.sectionOrder = [...s.sectionOrder, id];
 
-                const newSection = { id, type, title, column: "right" };
-                if (type === "text") {
-                    const contentKey = `content_${id}`;
-                    newSection.contentKey = contentKey;
-                    next[contentKey] = "";
-                } else {
-                    const listKey = `list_${id}`;
-                    newSection.listKey = listKey;
-                    next[listKey] = [];
-                }
+            const newSection = { id, type, title, column: "right" };
+            if (type === "text") {
+              const contentKey = `content_${id}`;
+              newSection.contentKey = contentKey;
+              next[contentKey] = "";
+            } else {
+              const listKey = `list_${id}`;
+              newSection.listKey = listKey;
+              next[listKey] = [];
+            }
 
-                next.sections = { ...s.sections, [id]: newSection };
-                return next;
-            });
+            next.sections = { ...s.sections, [id]: newSection };
+            return next;
+          });
         };
 
         const removeSection = (sectionId) => {
-            if (!window.confirm("Section wirklich löschen?")) return;
-            setState((s) => {
-                const sec = s.sections[sectionId];
-                if (!sec) return s;
+          if (!window.confirm("Section wirklich löschen?")) return;
+          setState((s) => {
+            const sec = s.sections[sectionId];
+            if (!sec) return s;
 
-                const next = { ...s };
-                next.sectionOrder = s.sectionOrder.filter((id) => id !== sectionId);
+            const next = { ...s };
+            next.sectionOrder = s.sectionOrder.filter((id) => id !== sectionId);
 
-                if (sec.type === "text" && sec.contentKey) delete next[sec.contentKey];
-                if (sec.type === "list" && sec.listKey) delete next[sec.listKey];
+            if (sec.type === "text" && sec.contentKey)
+              delete next[sec.contentKey];
+            if (sec.type === "list" && sec.listKey) delete next[sec.listKey];
 
-                const newSections = { ...s.sections };
-                delete newSections[sectionId];
-                next.sections = newSections;
-                return next;
-            });
+            const newSections = { ...s.sections };
+            delete newSections[sectionId];
+            next.sections = newSections;
+            return next;
+          });
         };
 
         const renderSection = (sectionId) => {
-            const sec = state.sections[sectionId];
-            if (!sec) return null;
+          const sec = state.sections[sectionId];
+          if (!sec) return null;
 
-            const titleNode = (
-                <EditableText
-                    value={sec.title}
-                    onChange={(v) => updateSectionTitle(sectionId, v)}
-                    className="text-xs font-bold tracking-[0.22em] uppercase px-3 py-1 rounded"
-                    placeholder="Section Titel"
-                />
-            );
+          const titleNode = (
+            <EditableText
+              value={sec.title}
+              onChange={(v) => updateSectionTitle(sectionId, v)}
+              className="text-xs font-bold tracking-[0.22em] uppercase px-3 py-1 rounded"
+              placeholder="Section Titel"
+            />
+          );
 
-            const titleBadgeWrap = (
-                <div
-                    className="inline-flex"
-                    style={{
-                        backgroundColor: "var(--cv-section-bg)",
-                        color: "var(--cv-section-text)",
-                        borderRadius: 10,
-                    }}
+          const titleBadgeWrap = (
+            <div
+              className="inline-flex"
+              style={{
+                backgroundColor: "var(--cv-section-bg)",
+                color: "var(--cv-section-text)",
+                borderRadius: 10,
+              }}
+            >
+              {titleNode}
+            </div>
+          );
+
+          const rightControls = (
+            <div className="flex items-center gap-2">
+              {sec.type === "list" ? (
+                <Button
+                  small
+                  variant="ghost"
+                  title="Eintrag hinzufügen"
+                  onClick={() => {
+                    const isProjects = sectionId === "projects";
+
+                    addListItem(
+                      sec.listKey,
+                      isProjects
+                        ? {
+                            // Projects template
+                            title: "Neues Projekt",
+                            meta: "Tech Stack (z.B. React, Node.js, ...)",
+                            bullets: ["Kurzbeschreibung / Ergebnis"],
+                            linkLabel: "Demo",
+                            linkHref: "https://",
+                          }
+                        : {
+                            // Default template (Experience/Education/etc.)
+                            date: "MM/JJJJ – MM/JJJJ",
+                            title: "Neuer Eintrag",
+                            location: "Ort / Institution",
+                            meta: "",
+                            bullets: ["Bullet"],
+                            linkLabel: "",
+                            linkHref: "",
+                          },
+                    );
+                  }}
                 >
-                    {titleNode}
-                </div>
+                  + Eintrag
+                </Button>
+              ) : null}
+              <Button
+                small
+                variant="ghost"
+                title="Section löschen"
+                onClick={() => removeSection(sectionId)}
+              >
+                Löschen
+              </Button>
+            </div>
+          );
+
+          if (sec.type === "text") {
+            const key = sec.contentKey;
+            return (
+              <SectionWrapper id={sectionId} key={sectionId}>
+                <SectionTitle
+                  titleNode={titleBadgeWrap}
+                  right={rightControls}
+                />
+                <EditableText
+                  value={state[key] || ""}
+                  onChange={(v) => setState((s) => ({ ...s, [key]: v }))}
+                  className="mt-3 text-xs leading-relaxed"
+                  placeholder="Text..."
+                  multiline
+                />
+              </SectionWrapper>
             );
+          }
 
-            const rightControls = (
-                <div className="flex items-center gap-2">
-                    {sec.type === "list" ? (
-                        <Button
-                            small
-                            variant="ghost"
-                            title="Eintrag hinzufügen"
-                            onClick={() => {
-                                const isProjects = sectionId === "projects";
+          if (sec.type === "list") {
+            const listKey = sec.listKey;
+            const list = state[listKey] || [];
+            const showLink =
+              sectionId === "projects" || String(listKey).startsWith("list_");
 
-                                addListItem(sec.listKey, isProjects
-                                    ? {
-                                        // Projects template
-                                        title: "Neues Projekt",
-                                        meta: "Tech Stack (z.B. React, Node.js, ...)",
-                                        bullets: ["Kurzbeschreibung / Ergebnis"],
-                                        linkLabel: "Demo",
-                                        linkHref: "https://",
-                                    }
-                                    : {
-                                        // Default template (Experience/Education/etc.)
-                                        date: "MM/JJJJ – MM/JJJJ",
-                                        title: "Neuer Eintrag",
-                                        location: "Ort / Institution",
-                                        meta: "",
-                                        bullets: ["Bullet"],
-                                        linkLabel: "",
-                                        linkHref: "",
-                                    }
-                                );
-                            }}
-                        >
-                            + Eintrag
-                        </Button>
-                    ) : null}
-                    <Button small variant="ghost" title="Section löschen" onClick={() => removeSection(sectionId)}>
-                        Löschen
-                    </Button>
-                </div>
+            return (
+              <SectionWrapper id={sectionId} key={sectionId}>
+                <SectionTitle
+                  titleNode={titleBadgeWrap}
+                  right={rightControls}
+                />
+                <DraggableItems
+                  items={list}
+                  setItems={setList(listKey)}
+                  render={(it) => (
+                    <ItemCard
+                      item={it}
+                      showLink={showLink}
+                      onChange={(next) => updateListItem(listKey, it.id, next)}
+                      onDelete={() => deleteListItem(listKey, it.id)}
+                    />
+                  )}
+                />
+              </SectionWrapper>
             );
+          }
 
-            if (sec.type === "text") {
-                const key = sec.contentKey;
-                return (
-                    <SectionWrapper id={sectionId} key={sectionId}>
-                        <SectionTitle titleNode={titleBadgeWrap} right={rightControls} />
-                        <EditableText
-                            value={state[key] || ""}
-                            onChange={(v) => setState((s) => ({ ...s, [key]: v }))}
-                            className="mt-3 text-xs leading-relaxed"
-                            placeholder="Text..."
-                            multiline
-                        />
-                    </SectionWrapper>
-                );
-            }
-
-            if (sec.type === "list") {
-                const listKey = sec.listKey;
-                const list = state[listKey] || [];
-                const showLink = sectionId === "projects" || String(listKey).startsWith("list_");
-
-                return (
-                    <SectionWrapper id={sectionId} key={sectionId}>
-                        <SectionTitle titleNode={titleBadgeWrap} right={rightControls} />
-                        <DraggableItems
-                            items={list}
-                            setItems={setList(listKey)}
-                            render={(it) => (
-                                <ItemCard
-                                    item={it}
-                                    showLink={showLink}
-                                    onChange={(next) => updateListItem(listKey, it.id, next)}
-                                    onDelete={() => deleteListItem(listKey, it.id)}
-                                />
-                            )}
-                        />
-                    </SectionWrapper>
-                );
-            }
-
-            return null;
+          return null;
         };
 
         const updateSettings = (patch) => {
-            setState((s) => ({ ...s, settings: { ...s.settings, ...patch } }));
+          setState((s) => ({ ...s, settings: { ...s.settings, ...patch } }));
         };
 
         return (
-            <div className="min-h-screen py-10 px-4">
-                <div className="mx-auto w-full max-w-[980px]">
-                    {/* ACTION BAR */}
-                    <div className="no-print mb-4 flex flex-wrap items-center justify-between gap-3">
-                        <div className="flex flex-wrap items-center gap-2">
-                            <Button onClick={() => window.print()} title="Browser-Druckdialog öffnen (Als PDF speichern)">Als PDF exportieren</Button>
-                            <Button variant="ghost" onClick={resetAll} title="Setzt alles auf den Startzustand zurück">Reset</Button>
-                            <Button variant="ghost" onClick={() => setShowSettings((v) => !v)} title="Abstände, Farben, Schrift">Einstellungen</Button>
-                        </div>
-
-                        <div className="flex flex-wrap items-center gap-2">
-                            <Button variant="ghost" onClick={() => createSection("text")} title="Neue Text-Section hinzufügen">+ Text-Section</Button>
-                            <Button variant="ghost" onClick={() => createSection("list")} title="Neue Listen-Section hinzufügen">+ Listen-Section</Button>
-                        </div>
-
-                        <div className="text-xs" style={{ color: "var(--cv-muted)" }}>Klick in Text = editieren • Auto-Save im Browser</div>
-                    </div>
-
-                    {/* SETTINGS PANEL */}
-                    {showSettings ? (
-                        <div className="no-print mb-4 rounded-2xl bg-white p-4 shadow-sm">
-                            <div className="text-sm font-bold" style={{ color: "var(--cv-heading)" }}>Layout & Style</div>
-                            <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="rounded-xl p-3">
-                                    <div className="text-xs font-semibold" style={{ color: "var(--cv-heading)" }}>Abstände</div>
-
-                                    <label className="mt-3 block text-xs" style={{ color: "var(--cv-muted)" }}>
-                                        Abstand zwischen Sections: <b>{state.settings.sectionGap}px</b>
-                                        <input className="mt-1 w-full" type="range" min="12" max="60" value={state.settings.sectionGap}
-                                               onChange={(e) => updateSettings({ sectionGap: Number(e.target.value) })}
-                                        />
-                                    </label>
-
-                                    <label className="mt-3 block text-xs" style={{ color: "var(--cv-muted)" }}>
-                                        Abstand zwischen Einträgen (Subsection): <b>{state.settings.itemGap}px</b>
-                                        <input className="mt-1 w-full" type="range" min="6" max="32" value={state.settings.itemGap}
-                                               onChange={(e) => updateSettings({ itemGap: Number(e.target.value) })}
-                                        />
-                                    </label>
-
-                                    <label className="mt-3 block text-xs" style={{ color: "var(--cv-muted)" }}>
-                                        Abstand Bulletpoints: <b>{state.settings.bulletGap}px</b>
-                                        <input className="mt-1 w-full" type="range" min="0" max="18" value={state.settings.bulletGap}
-                                               onChange={(e) => updateSettings({ bulletGap: Number(e.target.value) })}
-                                        />
-                                    </label>
-                                </div>
-
-                                <div className="rounded-xl p-3">
-                                    <div className="text-xs font-semibold" style={{ color: "var(--cv-heading)" }}>Schrift & Farben</div>
-
-                                    <label className="mt-3 block text-xs" style={{ color: "var(--cv-muted)" }}>
-                                        Schriftart (ganzer CV)
-                                        <select
-                                            className="mt-1 w-full rounded-lg border border-neutral-200 bg-white px-2 py-1 text-sm"
-                                            value={state.settings.fontFamily}
-                                            onChange={(e) => updateSettings({ fontFamily: e.target.value })}
-                                        >
-                                            {FONT_OPTIONS.map((f) => (
-                                                <option key={f.label} value={f.value}>{f.label}</option>
-                                            ))}
-                                        </select>
-                                    </label>
-
-                                    <div className="mt-3 grid grid-cols-3 gap-3">
-                                        <label className="block text-xs" style={{ color: "var(--cv-muted)" }}>
-                                            Text
-                                            <input className="mt-1 h-9 w-full" type="color" value={state.settings.textColor}
-                                                   onChange={(e) => updateSettings({ textColor: e.target.value })}
-                                            />
-                                        </label>
-                                        <label className="block text-xs" style={{ color: "var(--cv-muted)" }}>
-                                            Überschrift
-                                            <input className="mt-1 h-9 w-full" type="color" value={state.settings.headingColor}
-                                                   onChange={(e) => updateSettings({ headingColor: e.target.value })}
-                                            />
-                                        </label>
-                                        <label className="block text-xs" style={{ color: "var(--cv-muted)" }}>
-                                            Sekundär
-                                            <input className="mt-1 h-9 w-full" type="color" value={state.settings.mutedColor}
-                                                   onChange={(e) => updateSettings({ mutedColor: e.target.value })}
-                                            />
-                                        </label>
-                                    </div>
-
-                                    <div className="mt-3 grid grid-cols-2 gap-3">
-                                        <label className="block text-xs" style={{ color: "var(--cv-muted)" }}>
-                                            Section Hintergrund
-                                            <input className="mt-1 h-9 w-full" type="color" value={state.settings.sectionBgColor}
-                                                   onChange={(e) => updateSettings({ sectionBgColor: e.target.value })}
-                                            />
-                                        </label>
-                                        <label className="block text-xs" style={{ color: "var(--cv-muted)" }}>
-                                            Section Text
-                                            <input className="mt-1 h-9 w-full" type="color" value={state.settings.sectionTitleColor}
-                                                   onChange={(e) => updateSettings({ sectionTitleColor: e.target.value })}
-                                            />
-                                        </label>
-                                    </div>
-
-                                    <div className="mt-3 text-xs" style={{ color: "var(--cv-muted)" }}>
-                                        Tipp (AT): Sehr dunkles Grau statt reines Schwarz wirkt oft cleaner.
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ) : null}
-
-                    {/* CV PAGE */}
-                    <div className="cv-shell bg-white rounded-2xl overflow-hidden shadow-sm print-no-shadow">
-                        <div className="cv-grid grid grid-cols-1 md:grid-cols-[240px_1fr]">
-                            {/* LEFT SIDEBAR */}
-                            <aside className="cv-aside bg-neutral-50 border-r border-neutral-200 p-6">
-                                {/* PHOTO */}
-                                <div className="mb-5">
-                                    <div className="w-full max-w-[180px] aspect-[4/5] rounded-2xl bg-white overflow-hidden flex items-center justify-center">
-                                        {state.photo?.dataUrl ? (
-                                            <img src={state.photo.dataUrl} alt="Foto" className="h-full w-full object-cover" />
-                                        ) : (
-                                            <div className="text-xs font-semibold" style={{ color: "var(--cv-muted)" }}>Foto</div>
-                                        )}
-                                    </div>
-
-                                    <div className="no-print mt-2 flex items-center justify-between gap-2">
-                                        <label className="text-xs font-semibold" style={{ color: "var(--cv-heading)" }}>
-                                            Foto hochladen
-                                            <input type="file" accept="image/*" className="block mt-1 text-xs" onChange={(e) => handlePhotoUpload(e.target.files?.[0])} />
-                                        </label>
-                                        <Button small variant="ghost" onClick={() => setState((s) => ({ ...s, photo: { dataUrl: "" } }))} title="Foto entfernen">Entfernen</Button>
-                                    </div>
-                                </div>
-
-                                {/* Sidebar titles also use same badge */}
-                                {/* PERSONAL */}
-                                <SectionTitle
-                                    titleNode={
-                                        <span
-                                            className="inline-flex px-3 py-1 rounded text-xs font-bold tracking-[0.22em] uppercase"
-                                            style={{ backgroundColor: "var(--cv-section-bg)", color: "var(--cv-section-text)" }}
-                                        >
-      Persönliche Daten
-    </span>
-                                    }
-                                    right={
-                                        <Button
-                                            small
-                                            variant="ghost"
-                                            title="Neues Feld hinzufügen"
-                                            onClick={() => {
-                                                const key = window.prompt("Feldname (z.B. GitHub):", "GitHub");
-                                                if (!key) return;
-                                                setState((s) => ({
-                                                    ...s,
-                                                    personal: { ...s.personal, [key]: "Wert" },
-                                                }));
-                                            }}
-                                        >
-                                            +
-                                        </Button>
-                                    }
-                                />
-
-                                <div className="mt-3 space-y-2">
-                                    {Object.entries(state.personal).map(([k, v]) => (
-                                        <div key={k} className="flex items-start justify-between gap-2">
-                                            <div className="min-w-0 flex-1">
-                                                <SidebarField
-                                                    label={k}
-                                                    value={v}
-                                                    onChange={(next) =>
-                                                        setState((s) => ({
-                                                            ...s,
-                                                            personal: { ...s.personal, [k]: next },
-                                                        }))
-                                                    }
-                                                />
-                                            </div>
-
-                                            <button
-                                                className="no-print text-xs hover:text-neutral-900 shrink-0"
-                                                style={{ color: "var(--cv-muted)" }}
-                                                title="Feld entfernen"
-                                                onClick={() =>
-                                                    setState((s) => {
-                                                        const next = { ...s.personal };
-                                                        delete next[k];
-                                                        return { ...s, personal: next };
-                                                    })
-                                                }
-                                            >
-                                                ✕
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                {/* SKILLS */}
-                                <SectionTitle
-                                    titleNode={
-                                        <span
-                                            className="inline-flex px-3 py-1 rounded text-xs font-bold tracking-[0.22em] uppercase"
-                                            style={{ backgroundColor: "var(--cv-section-bg)", color: "var(--cv-section-text)" }}
-                                        >
-      Skills
-    </span>
-                                    }
-                                    right={
-                                        <Button
-                                            small
-                                            variant="ghost"
-                                            title="Neue Skill-Kategorie hinzufügen"
-                                            onClick={() => {
-                                                const key = window.prompt("Kategorie (z.B. Cloud):", "Cloud");
-                                                if (!key) return;
-                                                setState((s) => ({
-                                                    ...s,
-                                                    skills: { ...s.skills, [key]: "" },
-                                                }));
-                                            }}
-                                        >
-                                            +
-                                        </Button>
-                                    }
-                                />
-
-                                <div className="mt-3 space-y-3">
-                                    {Object.entries(state.skills).map(([k, v]) => (
-                                        <div key={k} className="flex items-start justify-between gap-2">
-                                            <div className="min-w-0 flex-1">
-                                                <div className="text-xs font-semibold" style={{ color: "var(--cv-heading)" }}>
-                                                    {k}
-                                                </div>
-
-                                                <EditableText
-                                                    value={v}
-                                                    onChange={(next) =>
-                                                        setState((s) => ({
-                                                            ...s,
-                                                            skills: { ...s.skills, [k]: next },
-                                                        }))
-                                                    }
-                                                    className="mt-1 text-xs leading-relaxed"
-                                                    placeholder="Skills"
-                                                />
-                                            </div>
-
-                                            <button
-                                                className="no-print text-xs hover:text-neutral-900 shrink-0"
-                                                style={{ color: "var(--cv-muted)" }}
-                                                title="Kategorie entfernen"
-                                                onClick={() =>
-                                                    setState((s) => {
-                                                        const next = { ...s.skills };
-                                                        delete next[k];
-                                                        return { ...s, skills: next };
-                                                    })
-                                                }
-                                            >
-                                                ✕
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
-
-
-                                <SectionTitle
-                                    titleNode={
-                                        <div
-                                            className="inline-flex"
-                                            style={{
-                                                backgroundColor: "var(--cv-section-bg)",
-                                                color: "var(--cv-section-text)",
-                                                borderRadius: 10,
-                                            }}
-                                        >
-                                            <EditableText
-                                                value={state.sidebarTitles?.languages || "Sprachen"}
-                                                onChange={(v) =>
-                                                    setState((s) => ({
-                                                        ...s,
-                                                        sidebarTitles: { ...(s.sidebarTitles || {}), languages: v },
-                                                    }))
-                                                }
-                                                className="text-xs font-bold tracking-[0.22em] uppercase px-3 py-1 rounded"
-                                                placeholder="Titel"
-                                            />
-                                        </div>
-                                    }
-                                    right={
-                                        <Button
-                                            small
-                                            variant="ghost"
-                                            onClick={() =>
-                                                setState((s) => ({
-                                                    ...s,
-                                                    languages: [...s.languages, { label: "Neue Sprache", level: "" }],
-                                                }))
-                                            }
-                                            title="Sprache hinzufügen"
-                                        >
-                                            +
-                                        </Button>
-                                    }
-                                />
-                                <div className="mt-3 space-y-2">
-                                    {state.languages.map((l, idx) => (
-                                        <div key={idx} className="flex items-baseline justify-between gap-3">
-                                            <EditableText value={l.label} onChange={(v) => {
-                                                const next = [...state.languages];
-                                                next[idx] = { ...next[idx], label: v };
-                                                setState((s) => ({ ...s, languages: next }));
-                                            }} className="text-xs font-semibold" placeholder="Sprache" />
-                                            <div className="flex items-center gap-2">
-                                                <EditableText value={l.level} onChange={(v) => {
-                                                    const next = [...state.languages];
-                                                    next[idx] = { ...next[idx], level: v };
-                                                    setState((s) => ({ ...s, languages: next }));
-                                                }} className="text-xs" placeholder="Level" />
-                                                <button className="no-print text-xs hover:text-neutral-900" style={{ color: "var(--cv-muted)" }} title="Sprache entfernen" onClick={() => setState((s) => ({ ...s, languages: s.languages.filter((_, i) => i !== idx) }))}>✕</button>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-
-
-
-                            </aside>
-
-                            {/* RIGHT MAIN */}
-                            <main className="cv-main p-6">
-                                <div className="mb-6 rounded-xl bg-neutral-50 p-5">
-                                    <EditableText value={state.header.name} onChange={(v) => setState((s) => ({ ...s, header: { ...s.header, name: v } }))} className="text-3xl font-extrabold tracking-tight" placeholder="Name" />
-                                    <EditableText value={state.header.headline} onChange={(v) => setState((s) => ({ ...s, header: { ...s.header, headline: v } }))} className="mt-2 text-lg font-semibold" placeholder="Titel" />
-                                    <EditableText value={state.header.subHeadline} onChange={(v) => setState((s) => ({ ...s, header: { ...s.header, subHeadline: v } }))} className="mt-1 text-sm" placeholder="Tech Stack" />
-                                </div>
-
-                                {state.sectionOrder.map((sid) => renderSection(sid))}
-
-                            </main>
-                        </div>
-                    </div>
-
-                    <div className="no-print mt-4 text-xs leading-relaxed" style={{ color: "var(--cv-muted)" }}>
-                        Speicher-Key: <code className="px-1 rounded bg-neutral-100">{STORAGE_KEY}</code>
-                    </div>
+          <div className="min-h-screen py-10 px-4">
+            <div className="mx-auto w-full max-w-[980px]">
+              {/* ACTION BAR */}
+              <div className="no-print mb-4 flex flex-wrap items-center justify-between gap-3">
+                <div className="flex flex-wrap items-center gap-2">
+                  <Button
+                    onClick={() => window.print()}
+                    title="Browser-Druckdialog öffnen (Als PDF speichern)"
+                  >
+                    Als PDF exportieren
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    onClick={resetAll}
+                    title="Setzt alles auf den Startzustand zurück"
+                  >
+                    Reset
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    onClick={() => setShowSettings((v) => !v)}
+                    title="Abstände, Farben, Schrift"
+                  >
+                    Einstellungen
+                  </Button>
                 </div>
-            </div>
-        );
-    }
 
-    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
-</script>
-</body>
+                <div className="flex flex-wrap items-center gap-2">
+                  <Button
+                    variant="ghost"
+                    onClick={() => createSection("text")}
+                    title="Neue Text-Section hinzufügen"
+                  >
+                    + Text-Section
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    onClick={() => createSection("list")}
+                    title="Neue Listen-Section hinzufügen"
+                  >
+                    + Listen-Section
+                  </Button>
+                </div>
+
+                <div className="text-xs" style={{ color: "var(--cv-muted)" }}>
+                  Klick in Text = editieren • Auto-Save im Browser
+                </div>
+              </div>
+
+              {/* SETTINGS PANEL */}
+              {showSettings ? (
+                <div className="no-print mb-4 rounded-2xl bg-white p-4 shadow-sm">
+                  <div
+                    className="text-sm font-bold"
+                    style={{ color: "var(--cv-heading)" }}
+                  >
+                    Layout & Style
+                  </div>
+                  <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="rounded-xl p-3">
+                      <div
+                        className="text-xs font-semibold"
+                        style={{ color: "var(--cv-heading)" }}
+                      >
+                        Abstände
+                      </div>
+
+                      <label
+                        className="mt-3 block text-xs"
+                        style={{ color: "var(--cv-muted)" }}
+                      >
+                        Abstand zwischen Sections:{" "}
+                        <b>{state.settings.sectionGap}px</b>
+                        <input
+                          className="mt-1 w-full"
+                          type="range"
+                          min="12"
+                          max="60"
+                          value={state.settings.sectionGap}
+                          onChange={(e) =>
+                            updateSettings({
+                              sectionGap: Number(e.target.value),
+                            })
+                          }
+                        />
+                      </label>
+
+                      <label
+                        className="mt-3 block text-xs"
+                        style={{ color: "var(--cv-muted)" }}
+                      >
+                        Abstand zwischen Einträgen (Subsection):{" "}
+                        <b>{state.settings.itemGap}px</b>
+                        <input
+                          className="mt-1 w-full"
+                          type="range"
+                          min="6"
+                          max="32"
+                          value={state.settings.itemGap}
+                          onChange={(e) =>
+                            updateSettings({ itemGap: Number(e.target.value) })
+                          }
+                        />
+                      </label>
+
+                      <label
+                        className="mt-3 block text-xs"
+                        style={{ color: "var(--cv-muted)" }}
+                      >
+                        Abstand Bulletpoints:{" "}
+                        <b>{state.settings.bulletGap}px</b>
+                        <input
+                          className="mt-1 w-full"
+                          type="range"
+                          min="0"
+                          max="18"
+                          value={state.settings.bulletGap}
+                          onChange={(e) =>
+                            updateSettings({
+                              bulletGap: Number(e.target.value),
+                            })
+                          }
+                        />
+                      </label>
+                    </div>
+
+                    <div className="rounded-xl p-3">
+                      <div
+                        className="text-xs font-semibold"
+                        style={{ color: "var(--cv-heading)" }}
+                      >
+                        Schrift & Farben
+                      </div>
+
+                      <label
+                        className="mt-3 block text-xs"
+                        style={{ color: "var(--cv-muted)" }}
+                      >
+                        Schriftart (ganzer CV)
+                        <select
+                          className="mt-1 w-full rounded-lg border border-neutral-200 bg-white px-2 py-1 text-sm"
+                          value={state.settings.fontFamily}
+                          onChange={(e) =>
+                            updateSettings({ fontFamily: e.target.value })
+                          }
+                        >
+                          {FONT_OPTIONS.map((f) => (
+                            <option key={f.label} value={f.value}>
+                              {f.label}
+                            </option>
+                          ))}
+                        </select>
+                      </label>
+
+                      <div className="mt-3 grid grid-cols-3 gap-3">
+                        <label
+                          className="block text-xs"
+                          style={{ color: "var(--cv-muted)" }}
+                        >
+                          Text
+                          <input
+                            className="mt-1 h-9 w-full"
+                            type="color"
+                            value={state.settings.textColor}
+                            onChange={(e) =>
+                              updateSettings({ textColor: e.target.value })
+                            }
+                          />
+                        </label>
+                        <label
+                          className="block text-xs"
+                          style={{ color: "var(--cv-muted)" }}
+                        >
+                          Überschrift
+                          <input
+                            className="mt-1 h-9 w-full"
+                            type="color"
+                            value={state.settings.headingColor}
+                            onChange={(e) =>
+                              updateSettings({ headingColor: e.target.value })
+                            }
+                          />
+                        </label>
+                        <label
+                          className="block text-xs"
+                          style={{ color: "var(--cv-muted)" }}
+                        >
+                          Sekundär
+                          <input
+                            className="mt-1 h-9 w-full"
+                            type="color"
+                            value={state.settings.mutedColor}
+                            onChange={(e) =>
+                              updateSettings({ mutedColor: e.target.value })
+                            }
+                          />
+                        </label>
+                      </div>
+
+                      <div className="mt-3 grid grid-cols-2 gap-3">
+                        <label
+                          className="block text-xs"
+                          style={{ color: "var(--cv-muted)" }}
+                        >
+                          Section Hintergrund
+                          <input
+                            className="mt-1 h-9 w-full"
+                            type="color"
+                            value={state.settings.sectionBgColor}
+                            onChange={(e) =>
+                              updateSettings({ sectionBgColor: e.target.value })
+                            }
+                          />
+                        </label>
+                        <label
+                          className="block text-xs"
+                          style={{ color: "var(--cv-muted)" }}
+                        >
+                          Section Text
+                          <input
+                            className="mt-1 h-9 w-full"
+                            type="color"
+                            value={state.settings.sectionTitleColor}
+                            onChange={(e) =>
+                              updateSettings({
+                                sectionTitleColor: e.target.value,
+                              })
+                            }
+                          />
+                        </label>
+                      </div>
+
+                      <div
+                        className="mt-3 text-xs"
+                        style={{ color: "var(--cv-muted)" }}
+                      >
+                        Tipp (AT): Sehr dunkles Grau statt reines Schwarz wirkt
+                        oft cleaner.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : null}
+
+              {/* CV PAGE */}
+              <div className="cv-shell bg-white rounded-2xl overflow-hidden shadow-sm print-no-shadow">
+                <div className="cv-grid grid grid-cols-1 md:grid-cols-[240px_1fr]">
+                  {/* LEFT SIDEBAR */}
+                  <aside className="cv-aside bg-neutral-50 border-r border-neutral-200 p-6">
+                    {/* PHOTO */}
+                    <div className="mb-5">
+                      <div className="w-full max-w-[180px] aspect-[4/5] rounded-2xl bg-white overflow-hidden flex items-center justify-center">
+                        {state.photo?.dataUrl ? (
+                          <img
+                            src={state.photo.dataUrl}
+                            alt="Foto"
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          <div
+                            className="text-xs font-semibold"
+                            style={{ color: "var(--cv-muted)" }}
+                          >
+                            Foto
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="no-print mt-2 flex items-center justify-between gap-2">
+                        <label
+                          className="text-xs font-semibold"
+                          style={{ color: "var(--cv-heading)" }}
+                        >
+                          Foto hochladen
+                          <input
+                            type="file"
+                            accept="image/*"
+                            className="block mt-1 text-xs"
+                            onChange={(e) =>
+                              handlePhotoUpload(e.target.files?.[0])
+                            }
+                          />
+                        </label>
+                        <Button
+                          small
+                          variant="ghost"
+                          onClick={() =>
+                            setState((s) => ({ ...s, photo: { dataUrl: "" } }))
+                          }
+                          title="Foto entfernen"
+                        >
+                          Entfernen
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Sidebar titles also use same badge */}
+                    {/* PERSONAL */}
+                    <SectionTitle
+                      titleNode={
+                        <span
+                          className="inline-flex px-3 py-1 rounded text-xs font-bold tracking-[0.22em] uppercase"
+                          style={{
+                            backgroundColor: "var(--cv-section-bg)",
+                            color: "var(--cv-section-text)",
+                          }}
+                        >
+                          Persönliche Daten
+                        </span>
+                      }
+                      right={
+                        <Button
+                          small
+                          variant="ghost"
+                          title="Neues Feld hinzufügen"
+                          onClick={() => {
+                            const key = window.prompt(
+                              "Feldname (z.B. GitHub):",
+                              "GitHub",
+                            );
+                            if (!key) return;
+                            setState((s) => ({
+                              ...s,
+                              personal: { ...s.personal, [key]: "Wert" },
+                            }));
+                          }}
+                        >
+                          +
+                        </Button>
+                      }
+                    />
+
+                    <div className="mt-3 space-y-2">
+                      {Object.entries(state.personal).map(([k, v]) => (
+                        <div
+                          key={k}
+                          className="flex items-start justify-between gap-2"
+                        >
+                          <div className="min-w-0 flex-1">
+                            <SidebarField
+                              label={k}
+                              value={v}
+                              onChange={(next) =>
+                                setState((s) => ({
+                                  ...s,
+                                  personal: { ...s.personal, [k]: next },
+                                }))
+                              }
+                            />
+                          </div>
+
+                          <button
+                            className="no-print text-xs hover:text-neutral-900 shrink-0"
+                            style={{ color: "var(--cv-muted)" }}
+                            title="Feld entfernen"
+                            onClick={() =>
+                              setState((s) => {
+                                const next = { ...s.personal };
+                                delete next[k];
+                                return { ...s, personal: next };
+                              })
+                            }
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* SKILLS */}
+                    <SectionTitle
+                      titleNode={
+                        <span
+                          className="inline-flex px-3 py-1 rounded text-xs font-bold tracking-[0.22em] uppercase"
+                          style={{
+                            backgroundColor: "var(--cv-section-bg)",
+                            color: "var(--cv-section-text)",
+                          }}
+                        >
+                          Skills
+                        </span>
+                      }
+                      right={
+                        <Button
+                          small
+                          variant="ghost"
+                          title="Neue Skill-Kategorie hinzufügen"
+                          onClick={() => {
+                            const key = window.prompt(
+                              "Kategorie (z.B. Cloud):",
+                              "Cloud",
+                            );
+                            if (!key) return;
+                            setState((s) => ({
+                              ...s,
+                              skills: { ...s.skills, [key]: "" },
+                            }));
+                          }}
+                        >
+                          +
+                        </Button>
+                      }
+                    />
+
+                    <div className="mt-3 space-y-3">
+                      {Object.entries(state.skills).map(([k, v]) => (
+                        <div
+                          key={k}
+                          className="flex items-start justify-between gap-2"
+                        >
+                          <div className="min-w-0 flex-1">
+                            <div
+                              className="text-xs font-semibold"
+                              style={{ color: "var(--cv-heading)" }}
+                            >
+                              {k}
+                            </div>
+
+                            <EditableText
+                              value={v}
+                              onChange={(next) =>
+                                setState((s) => ({
+                                  ...s,
+                                  skills: { ...s.skills, [k]: next },
+                                }))
+                              }
+                              className="mt-1 text-xs leading-relaxed"
+                              placeholder="Skills"
+                            />
+                          </div>
+
+                          <button
+                            className="no-print text-xs hover:text-neutral-900 shrink-0"
+                            style={{ color: "var(--cv-muted)" }}
+                            title="Kategorie entfernen"
+                            onClick={() =>
+                              setState((s) => {
+                                const next = { ...s.skills };
+                                delete next[k];
+                                return { ...s, skills: next };
+                              })
+                            }
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+
+                    <SectionTitle
+                      titleNode={
+                        <div
+                          className="inline-flex"
+                          style={{
+                            backgroundColor: "var(--cv-section-bg)",
+                            color: "var(--cv-section-text)",
+                            borderRadius: 10,
+                          }}
+                        >
+                          <EditableText
+                            value={state.sidebarTitles?.languages || "Sprachen"}
+                            onChange={(v) =>
+                              setState((s) => ({
+                                ...s,
+                                sidebarTitles: {
+                                  ...(s.sidebarTitles || {}),
+                                  languages: v,
+                                },
+                              }))
+                            }
+                            className="text-xs font-bold tracking-[0.22em] uppercase px-3 py-1 rounded"
+                            placeholder="Titel"
+                          />
+                        </div>
+                      }
+                      right={
+                        <Button
+                          small
+                          variant="ghost"
+                          onClick={() =>
+                            setState((s) => ({
+                              ...s,
+                              languages: [
+                                ...s.languages,
+                                { label: "Neue Sprache", level: "" },
+                              ],
+                            }))
+                          }
+                          title="Sprache hinzufügen"
+                        >
+                          +
+                        </Button>
+                      }
+                    />
+                    <div className="mt-3 space-y-2">
+                      {state.languages.map((l, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-baseline justify-between gap-3"
+                        >
+                          <EditableText
+                            value={l.label}
+                            onChange={(v) => {
+                              const next = [...state.languages];
+                              next[idx] = { ...next[idx], label: v };
+                              setState((s) => ({ ...s, languages: next }));
+                            }}
+                            className="text-xs font-semibold"
+                            placeholder="Sprache"
+                          />
+                          <div className="flex items-center gap-2">
+                            <EditableText
+                              value={l.level}
+                              onChange={(v) => {
+                                const next = [...state.languages];
+                                next[idx] = { ...next[idx], level: v };
+                                setState((s) => ({ ...s, languages: next }));
+                              }}
+                              className="text-xs"
+                              placeholder="Level"
+                            />
+                            <button
+                              className="no-print text-xs hover:text-neutral-900"
+                              style={{ color: "var(--cv-muted)" }}
+                              title="Sprache entfernen"
+                              onClick={() =>
+                                setState((s) => ({
+                                  ...s,
+                                  languages: s.languages.filter(
+                                    (_, i) => i !== idx,
+                                  ),
+                                }))
+                              }
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </aside>
+
+                  {/* RIGHT MAIN */}
+                  <main className="cv-main p-6">
+                    <div className="mb-6 rounded-xl bg-neutral-50 p-5">
+                      <EditableText
+                        value={state.header.name}
+                        onChange={(v) =>
+                          setState((s) => ({
+                            ...s,
+                            header: { ...s.header, name: v },
+                          }))
+                        }
+                        className="text-3xl font-extrabold tracking-tight"
+                        placeholder="Name"
+                      />
+                      <EditableText
+                        value={state.header.headline}
+                        onChange={(v) =>
+                          setState((s) => ({
+                            ...s,
+                            header: { ...s.header, headline: v },
+                          }))
+                        }
+                        className="mt-2 text-lg font-semibold"
+                        placeholder="Titel"
+                      />
+                      <EditableText
+                        value={state.header.subHeadline}
+                        onChange={(v) =>
+                          setState((s) => ({
+                            ...s,
+                            header: { ...s.header, subHeadline: v },
+                          }))
+                        }
+                        className="mt-1 text-sm"
+                        placeholder="Tech Stack"
+                      />
+                    </div>
+
+                    {state.sectionOrder.map((sid) => renderSection(sid))}
+                  </main>
+                </div>
+              </div>
+
+              <div
+                className="no-print mt-4 text-xs leading-relaxed"
+                style={{ color: "var(--cv-muted)" }}
+              >
+                Speicher-Key:{" "}
+                <code className="px-1 rounded bg-neutral-100">
+                  {STORAGE_KEY}
+                </code>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+  </body>
 </html>
