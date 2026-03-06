@@ -507,29 +507,58 @@
                     </div>
                 </div>
 
-                {Array.isArray(item.bullets) && item.bullets.length ? (
-                    <ul
-                        className="mt-2 list-disc pl-4 text-xs leading-relaxed"
-                        style={{rowGap: "var(--cv-bullet-gap)"}}
-                    >
-                        {item.bullets.map((b, i) => (
-                            <li
-                                key={i}
-                                style={{marginTop: i === 0 ? 0 : "var(--cv-bullet-gap)"}}
+                {Array.isArray(item.bullets) ? (
+                    <div className="mt-2">
+                        <ul
+                            className="list-disc pl-4 text-xs leading-relaxed"
+                            style={{ rowGap: "var(--cv-bullet-gap)" }}
+                        >
+                            {item.bullets.map((b, i) => (
+                                <li key={i} style={{ marginTop: i === 0 ? 0 : "var(--cv-bullet-gap)" }}>
+                                    <div className="flex items-start justify-between gap-2">
+                                        <EditableText
+                                            value={b}
+                                            onChange={(v) => {
+                                                const next = [...item.bullets];
+                                                next[i] = v;
+                                                onChange({ ...item, bullets: next });
+                                            }}
+                                            className="inline min-w-0 flex-1"
+                                            placeholder="Bullet"
+                                        />
+
+                                        <div className="no-print shrink-0">
+                                            <Button
+                                                small
+                                                variant="ghost"
+                                                title="Bullet löschen"
+                                                onClick={() => {
+                                                    const next = item.bullets.filter((_, idx) => idx !== i);
+                                                    onChange({ ...item, bullets: next });
+                                                }}
+                                            >
+                                                ✕
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+
+                        <div className="no-print mt-2">
+                            <Button
+                                small
+                                variant="ghost"
+                                title="Bullet hinzufügen"
+                                onClick={() => {
+                                    const next = [...item.bullets, "Neuer Bullet"];
+                                    onChange({ ...item, bullets: next });
+                                }}
                             >
-                                <EditableText
-                                    value={b}
-                                    onChange={(v) => {
-                                        const next = [...item.bullets];
-                                        next[i] = v;
-                                        onChange({...item, bullets: next});
-                                    }}
-                                    className="inline"
-                                    placeholder="Bullet"
-                                />
-                            </li>
-                        ))}
-                    </ul>
+                                + Bullet
+                            </Button>
+                        </div>
+                    </div>
                 ) : null}
             </div>
         );
@@ -1320,16 +1349,6 @@
                                                 }
                                             />
                                         </label>
-                                        <Button
-                                            small
-                                            variant="ghost"
-                                            onClick={() =>
-                                                setState((s) => ({...s, photo: {dataUrl: ""}}))
-                                            }
-                                            title="Foto entfernen"
-                                        >
-                                            Entfernen
-                                        </Button>
                                     </div>
                                 </div>
 
