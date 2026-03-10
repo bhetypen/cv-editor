@@ -468,30 +468,47 @@
                         )}
 
                         {showLink ? (
-                            <div className="no-print mt-2 flex flex-wrap items-center gap-2 text-xs">
-                                <EditableText
-                                    value={item.linkLabel || ""}
-                                    onChange={(v) => onChange({...item, linkLabel: v})}
-                                    className="font-semibold"
-                                    placeholder="Link (z.B. Demo/GitHub)"
-                                />
-                                <EditableText
-                                    value={item.linkHref || ""}
-                                    onChange={(v) => onChange({...item, linkHref: v})}
-                                    className="break-all"
-                                    placeholder="https://…"
-                                />
+                            <>
+                                {/* editable controls - screen only */}
+                                <div className="no-print mt-2 flex flex-wrap items-center gap-2 text-xs">
+                                    <EditableText
+                                        value={item.linkLabel || ""}
+                                        onChange={(v) => onChange({ ...item, linkLabel: v })}
+                                        className="font-semibold"
+                                        placeholder="Link (z.B. Demo/GitHub)"
+                                    />
+                                    <EditableText
+                                        value={item.linkHref || ""}
+                                        onChange={(v) => onChange({ ...item, linkHref: v })}
+                                        className="break-all"
+                                        placeholder="https://…"
+                                    />
+                                    {item.linkHref ? (
+                                        <a
+                                            className="underline decoration-neutral-300 underline-offset-2 hover:text-neutral-900"
+                                            href={item.linkHref}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            Öffnen
+                                        </a>
+                                    ) : null}
+                                </div>
+
+                                {/* print version */}
                                 {item.linkHref ? (
-                                    <a
-                                        className="underline decoration-neutral-300 underline-offset-2 hover:text-neutral-900"
-                                        href={item.linkHref}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        Öffnen
-                                    </a>
+                                    <div className="mt-2 text-xs">
+                                        <a
+                                            className="underline"
+                                            href={item.linkHref}
+                                            target="_blank"
+                                            rel="noreferrer"
+                                        >
+                                            {item.linkLabel || item.linkHref}
+                                        </a>
+                                    </div>
                                 ) : null}
-                            </div>
+                            </>
                         ) : null}
                     </div>
 
